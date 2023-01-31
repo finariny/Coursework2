@@ -19,6 +19,13 @@ public class Main {
                         case 3:
                             Menu.getTaskForSpecifiedDay(scanner);
                             break;
+                        case 4:
+                            Menu.editTask(scanner);
+                            break;
+                        case 5:
+                            Menu.getAllTasksGroupByDate();
+                        case 6:
+                            Menu.getListOfAllRemovedTasks();
                         case 0:
                             break label;
                     }

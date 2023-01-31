@@ -13,8 +13,13 @@ public class Menu {
     private static final Pattern DATE_TIME_PATTERN = Pattern.compile("\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}\\:\\d{2}");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
+    private static final Pattern DATE_PATTERN = Pattern.compile("\\d{2}\\.\\d{2}\\.\\d{4}");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
     public static void printMenu() {
-        System.out.println("1. Добавить задачу;\n2. Удалить задачу;\n3. Получить задачу на указанный день;\n0. Выход");
+        System.out.println("1. Добавить задачу;\n2. Удалить задачу;\n3. Получить задачу на указанный день;\n" +
+                "4. Редактировать задачу (заголовок или описание);\n5. Получить список всех задач, сгруппированных по дате;\n" +
+                "6. Получить список всех удалённых задач;\n0. Выход");
     }
 
     public static void inputTask(Scanner scanner) {
@@ -28,7 +33,7 @@ public class Menu {
 
         System.out.println("Введите цифру, обозначающую тип задачи (1 - рабочая; 2 - личная):");
         int numberOfType = scanner.nextInt();
-        Type type;
+        Type type = null;
         if (numberOfType == 1) {
             type = Type.PERSONAL;
         } else {
@@ -36,7 +41,7 @@ public class Menu {
         }
 
         System.out.println("Введите дату и время задачи в формате dd.MM.yyyy HH:mm:");
-        LocalDateTime taskTime;
+        LocalDateTime taskTime = null;
         if (scanner.hasNext(DATE_TIME_PATTERN)) {
             String dateTime = scanner.next(DATE_TIME_PATTERN);
             taskTime = LocalDateTime.parse(dateTime, DATE_TIME_FORMATTER);
@@ -67,26 +72,59 @@ public class Menu {
             }
         }
         taskService.addTask(task);
-        System.out.println("Задача добавлена");
+        System.out.println("Задача добавлена:");
+        System.out.println(task);
     }
 
     public static void deleteTask(Scanner scanner) {
         System.out.println("Введи ID задачи, которую хотите удалить:");
-        int idNumber = scanner.nextInt();
-        taskService.remove(idNumber);
-        scanner.close();
+        if (scanner.hasNextInt()) {
+            int idNumber = scanner.nextInt();
+            System.out.println(taskService.remove(idNumber));
+        } else {
+            System.out.println("ID введён некорректно");
+        }
     }
 
     public static void getTaskForSpecifiedDay(Scanner scanner) {
-        System.out.println("Введите дату и время задачи в формате dd.MM.yyyy HH:mm:");
-        LocalDateTime taskTime = null;
-        if (scanner.hasNext(DATE_TIME_PATTERN)) {
-            String dateTime = scanner.next(DATE_TIME_PATTERN);
-            taskTime = LocalDateTime.parse(dateTime, DATE_TIME_FORMATTER);
+        System.out.println("Введите дату задачи в формате dd.MM.yyyy:");
+        LocalDate taskTime;
+        if (scanner.hasNext(DATE_PATTERN)) {
+            String dateTime = scanner.next(DATE_PATTERN);
+            taskTime = LocalDate.parse(dateTime, DATE_FORMATTER);
+            System.out.println(taskService.getAllByDate(taskTime));
         } else {
             System.out.println("Задачи на день не найдены");
         }
-        scanner.close();
-        taskService.getAllByDate(taskTime.toLocalDate());
+    }
+
+    public static void editTask(Scanner scanner) {
+        System.out.println("Введите ID задачи, которую хотите отредактировать:");
+        int id = scanner.nextInt();
+        System.out.println("Введите новый текст для заголовка или описания:");
+        String string = scanner.next();
+        System.out.println("Введите цифру, обозначающую, что вы хотите отредактировать (1 - заголовок; 2 - описание):");
+        if (scanner.hasNextInt()) {
+            int number = scanner.nextInt();
+            switch (number) {
+                case 1:
+                    taskService.updateTitle(id, string);
+                    break;
+                case 2:
+                    taskService.updateDescription(id, string);
+                    break;
+            }
+            System.out.println("Задача обновлена");
+        } else {
+            System.out.println("Задача не найдена");
+        }
+    }
+
+    public static void getAllTasksGroupByDate() {
+        System.out.println(taskService.getAllGroupByDate());
+    }
+
+    public static void getListOfAllRemovedTasks() {
+        System.out.println(taskService.getAllRemovedTasks());
     }
 }
