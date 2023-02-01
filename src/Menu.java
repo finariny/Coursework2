@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class Menu {
 
-    private static final TaskService taskService = new TaskService();
+    private static final TaskService TASK_SERVICE = new TaskService();
     private static final Pattern DATE_TIME_PATTERN = Pattern.compile("\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}\\:\\d{2}");
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
@@ -35,9 +35,9 @@ public class Menu {
         int numberOfType = scanner.nextInt();
         Type type = null;
         if (numberOfType == 1) {
-            type = Type.PERSONAL;
-        } else {
             type = Type.WORK;
+        } else {
+            type = Type.PERSONAL;
         }
 
         System.out.println("Введите дату и время задачи в формате dd.MM.yyyy HH:mm:");
@@ -71,7 +71,7 @@ public class Menu {
                     task = new OneTimeTask(title, description, type, taskTime);
             }
         }
-        taskService.addTask(task);
+        TASK_SERVICE.addTask(task);
         System.out.println("Задача добавлена:");
         System.out.println(task);
     }
@@ -80,7 +80,8 @@ public class Menu {
         System.out.println("Введи ID задачи, которую хотите удалить:");
         if (scanner.hasNextInt()) {
             int idNumber = scanner.nextInt();
-            System.out.println(taskService.remove(idNumber));
+            System.out.println("Задача удалена:");
+            System.out.println(TASK_SERVICE.remove(idNumber));
         } else {
             System.out.println("ID введён некорректно");
         }
@@ -92,7 +93,7 @@ public class Menu {
         if (scanner.hasNext(DATE_PATTERN)) {
             String dateTime = scanner.next(DATE_PATTERN);
             taskTime = LocalDate.parse(dateTime, DATE_FORMATTER);
-            System.out.println(taskService.getAllByDate(taskTime));
+            System.out.println(TASK_SERVICE.getAllByDate(taskTime));
         } else {
             System.out.println("Задачи на день не найдены");
         }
@@ -108,10 +109,10 @@ public class Menu {
             int number = scanner.nextInt();
             switch (number) {
                 case 1:
-                    taskService.updateTitle(id, string);
+                    TASK_SERVICE.updateTitle(id, string);
                     break;
                 case 2:
-                    taskService.updateDescription(id, string);
+                    TASK_SERVICE.updateDescription(id, string);
                     break;
             }
             System.out.println("Задача обновлена");
@@ -121,10 +122,10 @@ public class Menu {
     }
 
     public static void getAllTasksGroupByDate() {
-        System.out.println(taskService.getAllGroupByDate());
+        System.out.println(TASK_SERVICE.getAllGroupByDate());
     }
 
     public static void getListOfAllRemovedTasks() {
-        System.out.println(taskService.getAllRemovedTasks());
+        System.out.println(TASK_SERVICE.getAllRemovedTasks());
     }
 }

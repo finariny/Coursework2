@@ -9,7 +9,7 @@ public class DailyTask extends Task {
     }
 
     @Override
-    public LocalDate appearsIn(LocalDate localDate) {
-        return localDate.plusDays(1);
+    public boolean appearsIn(LocalDate localDate) {
+        return localDate.isAfter(getDateTime().toLocalDate()) || localDate.isEqual(getDateTime().toLocalDate());
     }
 }

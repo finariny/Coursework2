@@ -13,13 +13,9 @@ public class TaskService {
         taskMap.put(task.getId(), task);
     }
 
-    public final Task remove(int id) {
-        try {
-            if (!taskMap.containsKey(id)) {
-                throw new TaskNotFoundException("Задача не найдена");
-            }
-        } catch (TaskNotFoundException e) {
-            System.out.println(e.getMessage());
+    public final Task remove(int id)  {
+        if (!taskMap.containsKey(id)) {
+            throw new TaskNotFoundException("Задача по ID: " + id + " не найдена");
         }
         removedTasks.add(taskMap.get(id));
         return taskMap.remove(id);
@@ -28,45 +24,30 @@ public class TaskService {
     public final List<Task> getAllByDate(LocalDate localDate) {
         List<Task> allTasksByDate = new ArrayList<>();
         for (Map.Entry<Integer, Task> entry : taskMap.entrySet()) {
-            if (entry.getValue().getDateTime().toLocalDate() == localDate) {
+            if (entry.getValue().appearsIn(localDate)) {
                 allTasksByDate.add(entry.getValue());
             }
-        }
-        try {
-            if (allTasksByDate.isEmpty()) {
-                throw new TaskNotFoundException("На указанный день задач не найдено");
-            }
-        } catch (TaskNotFoundException e) {
-            System.out.println(e.getMessage());
         }
         return allTasksByDate;
     }
 
-    public final Task updateDescription(int number, String string) {
-        try {
-            if (!taskMap.containsKey(number)) {
-                throw new TaskNotFoundException("Задача не найдена");
-            }
-        } catch (TaskNotFoundException e) {
-            System.out.println(e.getMessage());
+    public final Task updateDescription(int id, String text) {
+        if (!taskMap.containsKey(id)) {
+            throw new TaskNotFoundException("Задача по ID: " + id + " не найдена");
         }
-        taskMap.get(number).setDescription(string);
-        return taskMap.get(number);
+        taskMap.get(id).setDescription(text);
+        return taskMap.get(id);
     }
 
-    public final Task updateTitle(int number, String string){
-        try {
-            if (!taskMap.containsKey(number)) {
-                throw new TaskNotFoundException("Задача не найдена");
-            }
-        } catch(TaskNotFoundException e) {
-            System.out.println(e.getMessage());
+    public final Task updateTitle(int id, String text) {
+        if (!taskMap.containsKey(id)) {
+            throw new TaskNotFoundException("Задача по ID: " + id + " не найдена");
         }
-        taskMap.get(number).setTitle(string);
-        return taskMap.get(number);
+        taskMap.get(id).setTitle(text);
+        return taskMap.get(id);
     }
 
-    public final List<Task> getAllRemovedTasks() {
+    public List<Task> getAllRemovedTasks() {
         return removedTasks;
     }
 

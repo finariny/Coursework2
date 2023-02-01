@@ -9,7 +9,8 @@ public class MonthlyTask extends Task {
     }
 
     @Override
-    public LocalDate appearsIn(LocalDate localDate) {
-        return localDate.plusMonths(1);
+    public boolean appearsIn(LocalDate localDate) {
+        return localDate.isAfter(getDateTime().toLocalDate()) || localDate.isEqual(getDateTime().toLocalDate()) &&
+                localDate.getDayOfMonth() == localDate.getDayOfMonth();
     }
 }

@@ -63,7 +63,7 @@ public abstract class Task {
         return this.dateTime;
     }
 
-    public abstract LocalDate appearsIn(LocalDate localDate);
+    public abstract boolean appearsIn(LocalDate localDate);
 
     @Override
     public String toString() {

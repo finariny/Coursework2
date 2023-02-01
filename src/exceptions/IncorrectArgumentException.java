@@ -7,11 +7,11 @@ public class IncorrectArgumentException extends RuntimeException {
     }
 
     public final String getArgument() {
-        return "Параметр " + this.argument + " задан некорректно";
+        return this.argument;
     }
 
     @Override
     public String toString() {
-        return this.argument;
+        return "Параметр " + this.argument + " задан некорректно";
     }
 }
