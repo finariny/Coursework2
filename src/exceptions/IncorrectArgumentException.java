@@ -6,7 +6,7 @@ public class IncorrectArgumentException extends RuntimeException {
         this.argument = argument;
     }
 
-    public final String getArgument() {
+    public String getArgument() {
         return this.argument;
     }
 

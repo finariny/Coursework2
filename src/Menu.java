@@ -1,3 +1,4 @@
+import exceptions.TaskNotFoundException;
 import tasks.*;
 
 import java.time.LocalDate;
@@ -76,7 +77,7 @@ public class Menu {
         System.out.println(task);
     }
 
-    public static void deleteTask(Scanner scanner) {
+    public static void deleteTask(Scanner scanner) throws TaskNotFoundException {
         System.out.println("Введи ID задачи, которую хотите удалить:");
         if (scanner.hasNextInt()) {
             int idNumber = scanner.nextInt();
@@ -99,7 +100,7 @@ public class Menu {
         }
     }
 
-    public static void editTask(Scanner scanner) {
+    public static void editTask(Scanner scanner) throws TaskNotFoundException{
         System.out.println("Введите ID задачи, которую хотите отредактировать:");
         int id = scanner.nextInt();
         System.out.println("Введите новый текст для заголовка или описания:");

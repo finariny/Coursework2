@@ -9,11 +9,11 @@ public class TaskService {
     private final Map<Integer, Task> taskMap = new HashMap<>();
     private final List<Task> removedTasks = new ArrayList<>();
 
-    public final void addTask(Task task) {
+    public void addTask(Task task) {
         taskMap.put(task.getId(), task);
     }
 
-    public final Task remove(int id)  {
+    public Task remove(int id) throws TaskNotFoundException{
         if (!taskMap.containsKey(id)) {
             throw new TaskNotFoundException("Задача по ID: " + id + " не найдена");
         }
@@ -21,7 +21,7 @@ public class TaskService {
         return taskMap.remove(id);
     }
 
-    public final List<Task> getAllByDate(LocalDate localDate) {
+    public List<Task> getAllByDate(LocalDate localDate) {
         List<Task> allTasksByDate = new ArrayList<>();
         for (Map.Entry<Integer, Task> entry : taskMap.entrySet()) {
             if (entry.getValue().appearsIn(localDate)) {
@@ -31,7 +31,7 @@ public class TaskService {
         return allTasksByDate;
     }
 
-    public final Task updateDescription(int id, String text) {
+    public Task updateDescription(int id, String text) throws TaskNotFoundException{
         if (!taskMap.containsKey(id)) {
             throw new TaskNotFoundException("Задача по ID: " + id + " не найдена");
         }
@@ -39,7 +39,7 @@ public class TaskService {
         return taskMap.get(id);
     }
 
-    public final Task updateTitle(int id, String text) {
+    public Task updateTitle(int id, String text) throws TaskNotFoundException{
         if (!taskMap.containsKey(id)) {
             throw new TaskNotFoundException("Задача по ID: " + id + " не найдена");
         }
@@ -51,7 +51,7 @@ public class TaskService {
         return removedTasks;
     }
 
-    public final Map<LocalDate, List<Task>> getAllGroupByDate() {
+    public Map<LocalDate, List<Task>> getAllGroupByDate() {
         Map<LocalDate, List<Task>> allGroupByDate = new TreeMap<>();
         for (Map.Entry<Integer, Task> entry : taskMap.entrySet()) {
             if (allGroupByDate.containsKey(entry.getValue().getDateTime().toLocalDate())) {

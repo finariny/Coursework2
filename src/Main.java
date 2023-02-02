@@ -1,7 +1,9 @@
+import exceptions.TaskNotFoundException;
+
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TaskNotFoundException {
         try (Scanner scanner = new Scanner(System.in)) {
             label:
             while (true) {
